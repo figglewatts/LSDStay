@@ -15,8 +15,6 @@ namespace LSDStay
 
 		public static IntPtr LocationTimeOffset = new IntPtr(0x8AC70);
 
-		private static Process psx;
-
 		static int Main(string[] args)
 		{
 			Console.WriteLine("LSDStay for psxfin - By Figglewatts");
@@ -50,15 +48,19 @@ namespace LSDStay
 				case "start":
 				{
 					Console.WriteLine("Finding psxfin.exe...");
-					psx = PSX.FindPSX();
-					if (psx == null)
+					if (!PSX.FindPSX())
 					{
-						Console.WriteLine("Unable to find psxfin.exe, are you sure it's running?");
+						Console.WriteLine("ERROR: Unable to find psxfin.exe, are you sure it's running?");
+						break;
 					}
-					else
+					Console.WriteLine("Found psxfin.exe");
+					Console.WriteLine("Opening process...");
+					if (!PSX.OpenPSX())
 					{
-						Console.WriteLine("Found psxfin.exe, PID: " + psx.Id);
+						Console.WriteLine("ERROR: Unable to open psxfin.exe");
+						break;
 					}
+					Console.WriteLine("Process psxfin.exe opened, Handle: " + PSX.PSXHandle.ToString());
 				} break;
 				default:
 				{
