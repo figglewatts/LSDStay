@@ -15,18 +15,21 @@ namespace LSDStay
 
 		public static IntPtr LocationTimeOffset = new IntPtr(0x8AC70);
 
+		private static bool running = true;
+
 		static int Main(string[] args)
 		{
 			Console.WriteLine("LSDStay for psxfin - By Figglewatts");
 			Console.WriteLine("-----------------------------------");
 			Console.WriteLine("Use 'start' command to hook to PSX");
 			
-			for (;;)
+			while (running)
 			{
 				//bool wm = Memory.WriteMemory(process, (IntPtr)0x072A16D0, 100);
 				//Console.WriteLine((wm == true ? "Success" : "Failure") + IntPtr.Add(PSXOffset, LocationTimeOffset.ToInt32()).ToString());
 				ProcessConsoleInput(GetConsoleInput());
 			}
+			return 0;
 		}
 
 		public static string GetConsoleInput()
@@ -62,6 +65,12 @@ namespace LSDStay
 					}
 					Console.WriteLine("Process psxfin.exe opened, Handle: " + PSX.PSXHandle.ToString());
 				} break;
+				case "exit":
+				{
+					Console.WriteLine("Exiting...");
+					running = !PSX.ClosePSX(); // close if we successfully exited
+					break;
+				}
 				default:
 				{
 					Console.WriteLine("Did not recognize command: " + inputSplit[0]);

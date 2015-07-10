@@ -25,13 +25,15 @@ namespace LSDStay
 			return (PSXHandle != null);
 		}
 
-		public static void ClosePSX(IntPtr processHandle)
+		public static bool ClosePSX()
 		{
-			int result = Memory.CloseHandle(processHandle);
+			int result = Memory.CloseHandle(PSXHandle);
 			if (result == 0)
 			{
 				Console.WriteLine("ERROR: Could not close psx handle");
+				return false;
 			}
+			return true;
 		}
 
 		public static string Read(IntPtr address, ref byte[] buffer)
