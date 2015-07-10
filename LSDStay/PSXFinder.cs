@@ -12,7 +12,23 @@ namespace LSDStay
 		public static Process FindPSX()
 		{
 			Process psx = Process.GetProcessesByName("psxfin").FirstOrDefault();
+			return psx;
+		}
 
+		public static IntPtr OpenPSX(Process psx)
+		{
+			int PID = psx.Id;
+			IntPtr psxHandle = Memory.OpenProcess((uint)Memory.ProcessAccessFlags.All, false, PID);
+			
+		}
+
+		public static void ClosePSX(IntPtr processHandle)
+		{
+			int result = Memory.CloseHandle(processHandle);
+			if (result == 0)
+			{
+				Console.WriteLine("ERROR: Could not close psx handle");
+			}
 		}
 	}
 }
