@@ -11,7 +11,7 @@ namespace LSDStay
 	public static class Memory
 	{
 		[Flags]
-		public static enum ProcessAccessFlags : uint
+		public enum ProcessAccessFlags : uint
 		{
 			All = 0x001F0FFF,
 			Terminate = 0x00000001,
@@ -27,6 +27,8 @@ namespace LSDStay
 
 		public static readonly int PSXGameOffset = 0x171A5C;
 
+		public static int GameMemoryStartAddr = 0;
+
 		[DllImport("kernel32.dll")]
 		public static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle,
 			int dwProcessId);
@@ -41,6 +43,15 @@ namespace LSDStay
 
 		[DllImport("kernel32.dll")]
 		public static extern Int32 CloseHandle(IntPtr hProcess);
+
+		public static void GetGameDataOffset()
+		{
+			byte[] buffer = new byte[4];
+			int numberOfBytesRead = 0;
+			ReadProcessMemory((int)PSX.PSXHandle, (int)PSX.PSXProcess.MainModule.BaseAddress + PSXGameOffset, buffer, buffer.Length, ref numberOfBytesRead);
+			GameMemoryStartAddr = BitConverter.ToInt32(buffer, 0);
+			Console.WriteLine("Game start address is: " + GameMemoryStartAddr.ToString("x4"));
+		}
 
 		public static bool WriteMemory(Process p, IntPtr address, long v)
 		{
