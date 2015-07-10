@@ -54,5 +54,15 @@ namespace LSDStay
 
 			return returnVal;
 		}
+
+		public static string FormatToHexString(byte[] data)
+		{
+			string toReturn = "";
+			for (int i = 0; i < data.Length; i++)
+			{
+				toReturn += string.Format("{0:x2}", data[i]);
+			}
+			return toReturn;
+		}
 	}
 }
