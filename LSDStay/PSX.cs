@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace LSDStay
 {
-	public static class PSXFinder
+	public static class PSX
 	{
 		public static Process FindPSX()
 		{
