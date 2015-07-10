@@ -11,7 +11,7 @@ namespace LSDStay
 	{
 		public static Process PSXProcess;
 		public static IntPtr PSXHandle;
-		
+
 		public static bool FindPSX()
 		{
 			PSXProcess = Process.GetProcessesByName("psxfin").FirstOrDefault();
@@ -22,7 +22,8 @@ namespace LSDStay
 		{
 			int PID = PSXProcess.Id;
 			PSXHandle = Memory.OpenProcess((uint)Memory.ProcessAccessFlags.All, false, PID);
-			return (PSXHandle != null);
+			Memory.GetGameDataOffset();
+			return ( PSXHandle != null );
 		}
 
 		public static bool ClosePSX()
@@ -36,12 +37,14 @@ namespace LSDStay
 			return true;
 		}
 
+		
+
 		public static string Read(IntPtr address, ref byte[] buffer)
 		{
 			int bytesRead = 0;
-			int absoluteAddress = Memory.PSXGameOffset + (int)address;
+			int absoluteAddress = Memory.GameMemoryStartAddr + (int)address;
 			//IntPtr absoluteAddressPtr = new IntPtr(absoluteAddress);
-			
+			Console.WriteLine("Reading from: " + absoluteAddress.ToString("x2"));
 			Memory.ReadProcessMemory((int)PSXHandle, absoluteAddress, buffer, buffer.Length, ref bytesRead);
 			
 			return "Address " + address.ToString("x2") + " contains " + Memory.FormatToHexString(buffer);
@@ -50,12 +53,17 @@ namespace LSDStay
 		public static string Write(IntPtr address, byte[] data)
 		{
 			int bytesWritten;
-			int absoluteAddress = Memory.PSXGameOffset + (int)address;
+			int absoluteAddress = Memory.GameMemoryStartAddr + (int)address;
 			IntPtr absoluteAddressPtr = new IntPtr(absoluteAddress);
 
 			Memory.WriteProcessMemory(PSXHandle, absoluteAddressPtr, data, (uint)data.Length, out bytesWritten);
 			
 			return "Address " + address.ToString("x2") + " is now " + Memory.FormatToHexString(data);
+		}
+
+		public static void DetectMemStart()
+		{
+			
 		}
 	}
 }
