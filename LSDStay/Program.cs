@@ -50,7 +50,7 @@ namespace LSDStay
 				case "start":
 				{
 					Console.WriteLine("Finding psxfin.exe...");
-					psx = PSXFinder.FindPSX();
+					psx = PSX.FindPSX();
 					if (psx == null)
 					{
 						Console.WriteLine("Unable to find psxfin.exe, are you sure it's running?");
