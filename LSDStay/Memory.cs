@@ -25,6 +25,8 @@ namespace LSDStay
 			Synchronize = 0x00100000
 		}
 
+		public static readonly int PSXGameOffset = 0x171A5C;
+
 		[DllImport("kernel32.dll")]
 		public static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle,
 			int dwProcessId);
